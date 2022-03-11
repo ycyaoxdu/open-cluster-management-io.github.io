@@ -11,6 +11,14 @@
   <title>Open Cluster Management</title>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1PXKZXT157"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-1PXKZXT157');
+  </script>
 </head>
 <body>
     <div class="container-fluid">
@@ -100,6 +108,9 @@
                     <a class="navlink" href="/concepts/manifestwork">ManifestWork</a>
                 </li>
                 <li>
+                    <a class="navlink" href="/concepts/managedclusterset">ManagedClusterSet</a>
+                </li>
+                <li>
                     <a class="navlink" href="/concepts/placement">Placement</a>
                 </li>
                 <li>
@@ -139,6 +150,17 @@
                         <li>
                             <a class="navlink" href="/getting-started/integration/policy-controllers">Policy controllers</a>
                         </li>
+                        <li>
+                            <a class="navlink" href="/getting-started/integration/managed-serviceaccount">Managed service account</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="navlink" href="/getting-started/administration">Administration</a>
+                    <ul class="collapse">
+                        <li>
+                            <a class="navlink" href="/getting-started/administration/upgrading">Upgrading</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -148,6 +170,12 @@
             <ul class="collapse">
                 <li>
                     <a class="navlink" href="/scenarios/deploy-kubernetes-resources">Deploy Kubernetes Resources</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/scenarios/extending-managed-clusters">Extend Managed Clusters</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/scenarios/pushing-kube-api-requests">Pushing Kube API Requests to the Managed Clusters</a>
                 </li>
             </ul>
         </li>
@@ -181,7 +209,7 @@
             <a class="navlink resource" href="https://groups.google.com/g/open-cluster-management" target="_blank"><i class="bi bi-envelope-fill"></i><span style="padding-left: 10px;">Mailing group</span></a>
         </li>
         <li>
-            <a class="navlink resource" href="https://github.com/open-cluster-management-io/community/projects/1" target="_blank"><i class="bi bi-calendar-event-fill"></i><span style="padding-left: 10px;">Community meetings</span></a>
+            <a class="navlink resource" href="https://calendar.google.com/calendar/u/0/embed?src=openclustermanagement@gmail.com" target="_blank"><i class="bi bi-calendar-event-fill"></i><span style="padding-left: 10px;">Community meetings</span></a>
         </li>
     </ul>
 </nav>
@@ -276,7 +304,7 @@ kubectl:</p>
 NAMESPACE   NAME                     AVAILABLE   DEGRADED   PROGRESSING
 &lt;cluster&gt;   &lt;addon&gt;                  True                   
 </code></pre></div><p>The addon agent are expected to report its healthiness periodically as long as it&rsquo;s
-running. Also the versioning the addon agent can be reflected in the resources
+running. Also the versioning of the addon agent can be reflected in the resources
 optionally so that we can control the upgrading the agents progressively.</p>
 <h2 id="examples">Examples</h2>
 <p>Here&rsquo;s a few examples of cases where we will need add-ons:</p>
@@ -293,7 +321,7 @@ provides a library for developers to develop an add-ons in open-cluster-manageme
 more easily. Take a look at the <a href="https://github.com/open-cluster-management-io/addon-framework/tree/main/examples/helloworld">helloworld example</a>
 to understand how the add-on framework can be used.</p>
 <h3 id="custom-signers">Custom signers</h3>
-<p>The original Kubernetes CSR api only supports there built-in signers:</p>
+<p>The original Kubernetes CSR api only supports three built-in signers:</p>
 <ul>
 <li>&ldquo;kubernetes.io/kube-apiserver-client&rdquo;</li>
 <li>&ldquo;kubernetes.io/kube-apiserver-client-kubelet&rdquo;</li>
@@ -328,6 +356,12 @@ with properties:
 </ul>
 </li>
 </ul>
+<h3 id="auto-install-by-cluster-discovery">Auto-install by cluster discovery</h3>
+<p>The addon manager can automatically install an addon to the managed clusters
+upon discovering new clusters by setting the <code>InstallStrategy</code> from the
+<a href="https://github.com/open-cluster-management-io/addon-framework">addon-framework</a>.
+On the other hand, the admin can also manually install the addon for the
+clusters by applying <code>ManagedClusterAddon</code> into their cluster namespace.</p>
 
 </div>
 <script type="text/javascript" src="/clipboard-copy.js"></script>

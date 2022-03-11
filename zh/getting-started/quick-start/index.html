@@ -11,6 +11,14 @@
   <title>Open Cluster Management</title>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1PXKZXT157"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-1PXKZXT157');
+  </script>
 </head>
 <body>
     <div class="container-fluid">
@@ -104,6 +112,9 @@
                     <a class="navlink" href="/zh/concepts/manifestwork">资源下发</a>
                 </li>
                 <li>
+                    <a class="navlink" href="/zh/concepts/managedclusterset">托管集群分组</a>
+                </li>
+                <li>
                     <a class="navlink" href="/zh/concepts/placement">匹配路由</a>
                 </li>
                 <li>
@@ -135,13 +146,24 @@
                             <a class="navlink" href="/zh/getting-started/integration/app-lifecycle">应用生命周期管理</a>
                         </li>
                         <li>
-                            <a class="navlink" href="/zh/getting-started/integration/cluster-proxy">网络隧道</a>
+                            <a class="navlink" href="/zh/getting-started/integration/cluster-proxy">多集群网络隧道</a>
                         </li>
                         <li>
                             <a class="navlink" href="/zh/getting-started/integration/policy-framework">Policy框架</a>
                         </li>
                         <li>
                             <a class="navlink" href="/zh/getting-started/integration/policy-controllers">Policy控制器</a>
+                        </li>
+                        <li>
+                            <a class="navlink" href="/zh/getting-started/integration/managed-serviceaccount">托管多集群ServiceAccount</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/getting-started/administration">运维管理</a>
+                    <ul class="collapse">
+                        <li>
+                            <a class="navlink" href="/zh/getting-started/administration/upgrading">升级版本</a>
                         </li>
                     </ul>
                 </li>
@@ -152,6 +174,12 @@
             <ul class="collapse">
                 <li>
                     <a class="navlink" href="/zh/scenarios/deploy-kubernetes-resources">部署Kubernetes资源</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/scenarios/extending-managed-clusters">扩展集群模型</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/scenarios/pushing-kube-api-requests">向托管集群推送Kube API请求</a>
                 </li>
             </ul>
         </li>
@@ -185,7 +213,7 @@
             <a class="navlink resource" href="https://groups.google.com/g/open-cluster-management" target="_blank"><i class="bi bi-envelope-fill"></i><span style="padding-left: 10px;">Mailing group</span></a>
         </li>
         <li>
-            <a class="navlink resource" href="https://github.com/open-cluster-management-io/community/projects/1" target="_blank"><i class="bi bi-calendar-event-fill"></i><span style="padding-left: 10px;">Community meetings</span></a>
+            <a class="navlink resource" href="https://calendar.google.com/calendar/u/0/embed?src=openclustermanagement@gmail.com" target="_blank"><i class="bi bi-calendar-event-fill"></i><span style="padding-left: 10px;">Community meetings</span></a>
         </li>
     </ul>
 </nav>
@@ -235,7 +263,9 @@ kind create cluster --name <span style="color:#e6db74">${</span>MANAGED_CLUSTER_
 <ol>
 <li>
 <p>启动Open Cluster Management的中枢控制面：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell">clusteradm init --context <span style="color:#e6db74">${</span>CTX_HUB_CLUSTER<span style="color:#e6db74">}</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell"><span style="color:#75715e"># 默认安装上一个发布版本的OCM核心组件.</span>
+<span style="color:#75715e"># 可以通过例如 &#34;--bundle-version=latest&#34; 安装开发中的最新版本.</span>
+clusteradm init --context <span style="color:#e6db74">${</span>CTX_HUB_CLUSTER<span style="color:#e6db74">}</span>
 </code></pre></div><p>然后你可以使用<code>join</code>命令完成注册流程：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell">...
 clusteradm join --hub-token &lt;token_data&gt; --hub-apiserver https://126.0.0.1:39242 --cluster-name &lt;managed_cluster_name&gt;

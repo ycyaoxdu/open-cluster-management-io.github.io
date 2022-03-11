@@ -11,6 +11,14 @@
   <title>Open Cluster Management</title>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1PXKZXT157"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-1PXKZXT157');
+  </script>
 </head>
 <body>
     <div class="container-fluid">
@@ -104,6 +112,9 @@
                     <a class="navlink" href="/zh/concepts/manifestwork">资源下发</a>
                 </li>
                 <li>
+                    <a class="navlink" href="/zh/concepts/managedclusterset">托管集群分组</a>
+                </li>
+                <li>
                     <a class="navlink" href="/zh/concepts/placement">匹配路由</a>
                 </li>
                 <li>
@@ -135,13 +146,24 @@
                             <a class="navlink" href="/zh/getting-started/integration/app-lifecycle">应用生命周期管理</a>
                         </li>
                         <li>
-                            <a class="navlink" href="/zh/getting-started/integration/cluster-proxy">网络隧道</a>
+                            <a class="navlink" href="/zh/getting-started/integration/cluster-proxy">多集群网络隧道</a>
                         </li>
                         <li>
                             <a class="navlink" href="/zh/getting-started/integration/policy-framework">Policy框架</a>
                         </li>
                         <li>
                             <a class="navlink" href="/zh/getting-started/integration/policy-controllers">Policy控制器</a>
+                        </li>
+                        <li>
+                            <a class="navlink" href="/zh/getting-started/integration/managed-serviceaccount">托管多集群ServiceAccount</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/getting-started/administration">运维管理</a>
+                    <ul class="collapse">
+                        <li>
+                            <a class="navlink" href="/zh/getting-started/administration/upgrading">升级版本</a>
                         </li>
                     </ul>
                 </li>
@@ -152,6 +174,12 @@
             <ul class="collapse">
                 <li>
                     <a class="navlink" href="/zh/scenarios/deploy-kubernetes-resources">部署Kubernetes资源</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/scenarios/extending-managed-clusters">扩展集群模型</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/scenarios/pushing-kube-api-requests">向托管集群推送Kube API请求</a>
                 </li>
             </ul>
         </li>
@@ -185,7 +213,7 @@
             <a class="navlink resource" href="https://groups.google.com/g/open-cluster-management" target="_blank"><i class="bi bi-envelope-fill"></i><span style="padding-left: 10px;">Mailing group</span></a>
         </li>
         <li>
-            <a class="navlink resource" href="https://github.com/open-cluster-management-io/community/projects/1" target="_blank"><i class="bi bi-calendar-event-fill"></i><span style="padding-left: 10px;">Community meetings</span></a>
+            <a class="navlink resource" href="https://calendar.google.com/calendar/u/0/embed?src=openclustermanagement@gmail.com" target="_blank"><i class="bi bi-calendar-event-fill"></i><span style="padding-left: 10px;">Community meetings</span></a>
         </li>
     </ul>
 </nav>
@@ -193,7 +221,7 @@
 </div>
             <div class="col-10 col-md-9 padding-none">
 <div id="content">
-    <h1>Cluster proxy</h1>
+    <h1>多集群网络隧道</h1>
     <p><a href="https://github.com/open-cluster-management-io/cluster-proxy">Cluster proxy</a>
 is an OCM addon providing L4 network connectivity from hub cluster to
 the managed clusters without <strong>any additional requirement</strong> to the managed
@@ -212,7 +240,12 @@ sub-project <a href="https://github.com/kubernetes-sigs/apiserver-network-proxy"
         <li><a href="#architecture">Architecture</a></li>
         <li><a href="#prerequisite">Prerequisite</a></li>
         <li><a href="#installation">Installation</a></li>
-        <li><a href="#usage">Usage</a></li>
+        <li><a href="#usage">Usage</a>
+          <ul>
+            <li><a href="#command-line-tools">Command-line tools</a></li>
+            <li><a href="#example-code">Example code</a></li>
+          </ul>
+        </li>
         <li><a href="#more-insight">More insight</a>
           <ul>
             <li><a href="#troubleshooting">Troubleshooting</a></li>
@@ -301,7 +334,7 @@ or configure the proxy agents no more.</p>
 $ helm repo update
 $ helm search repo ocm
 NAME                              	CHART VERSION	APP VERSION	DESCRIPTION                                   
-ocm/cluster-proxy                 	&lt;...&gt;       	1.0.0      	A Helm chart <span style="color:#66d9ef">for</span> Cluster-Proxy                
+ocm/cluster-proxy                 	v0.1.1       	1.0.0      	A Helm chart <span style="color:#66d9ef">for</span> Cluster-Proxy                
 ...
 </code></pre></div><p>Then run the following helm command to install the cluster-proxy addon:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm install -n open-cluster-management-addon --create-namespace <span style="color:#ae81ff">\
@@ -325,6 +358,14 @@ NAMESPACE     NAME                     AVAILABLE   DEGRADED   PROGRESSING
 </code></pre></div><p>The proxy agent distributed in the managed cluster will be periodically
 renewing the lease lock of the addon instance.</p>
 <h2 id="usage">Usage</h2>
+<h3 id="command-line-tools">Command-line tools</h3>
+<p>Using the <a href="https://open-cluster-management.io/getting-started/quick-start/#install-clusteradm-cli-tool">clusteradm</a>
+to check the status of the cluster-proxy addon:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ clusteradm proxy health
+CLUSTER NAME    INSTALLED    AVAILABLE    PROBED HEALTH    LATENCY
+&lt;cluster#1&gt;     True         True         True             67.595144ms
+&lt;cluster#2&gt;     True         True         True             85.418368ms
+</code></pre></div><h3 id="example-code">Example code</h3>
 <p>An <a href="https://github.com/open-cluster-management-io/cluster-proxy/blob/main/examples/test-client/main.go">example client</a>
 in the cluster proxy repo shows us how to dynamically talk to the kube-apiserver
 of a managed cluster from the hub cluster by simply prescribing the name of

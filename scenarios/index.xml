@@ -16,8 +16,28 @@
       
       <guid>http://open-cluster-management.io/scenarios/deploy-kubernetes-resources/</guid>
       <description>After bootstrapping an OCM environment of at least one managed clusters, now it&amp;rsquo;s time to begin your first journey of deploying Kubernetes resources into your managed clusters with OCM&amp;rsquo;s ManifestWork API.
-Prerequisites By design, you don&amp;rsquo;t need to do any additional preparation before working on the ManifestWork API. Just in case of runnint into any unexpected failures, you can make sure your environment by checking the following conditions:
+Prerequisites By design, you don&amp;rsquo;t need to do any additional preparation before working on the ManifestWork API. Just in case of run into any unexpected failures, you can make sure your environment by checking the following conditions:
   The CRD ManifestWork is installed in the hub cluster:</description>
+    </item>
+    
+    <item>
+      <title>Extending managed clusters with custom attributes</title>
+      <link>http://open-cluster-management.io/scenarios/extending-managed-clusters/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://open-cluster-management.io/scenarios/extending-managed-clusters/</guid>
+      <description>Under some cases we need a convenient way to extend OCM&amp;rsquo;s Managed Cluster data model so that our own custom multi-cluster system can easily work over the OCM&amp;rsquo;s native cluster api otherwise we will have to maintain an additional Kubernetes&amp;rsquo; CustomResourceDefinition in the project. OCM definitely supports developers to decorate the cluster api with minimal effort, and in the following content we will walk through that briefly.
+The original cluster model in OCM &amp;ldquo;Managed Cluster&amp;rdquo; is designed to be a neat and light-weight placeholder resource of which the spec doesn&amp;rsquo;t require any additional information other than &amp;ldquo;whether the cluster is accepted or not&amp;rdquo; i.</description>
+    </item>
+    
+    <item>
+      <title>Pushing Kubernetes API requests to the managed clusters</title>
+      <link>http://open-cluster-management.io/scenarios/pushing-kube-api-requests/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://open-cluster-management.io/scenarios/pushing-kube-api-requests/</guid>
+      <description>By following the instructions in this document, an OCM hub admin will be able to &amp;ldquo;push&amp;rdquo; Kubernetes API requests to the managed clusters. The benefit of using this method for &amp;ldquo;pushing&amp;rdquo; requests in OCM is that we don&amp;rsquo;t need to explicitly configure any API endpoint for the managed clusters or provide any client credentials as preparation. We just need to enable/install the following OCM addons:
+ Cluster-Proxy: Setting up the konnectivity tunnels between the hub cluster and the managed clusters so the hub cluster can connect/access the managed cluster from anywhere.</description>
     </item>
     
   </channel>
