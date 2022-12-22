@@ -64,7 +64,7 @@
             </ul>
           </li>
           <li class="nav-item pe-2">
-            <a class="nav-link text-light" href="https://www.youtube.com/channel/UC7xxOh2jBM5Jfwt3fsBzOZw" target="_blank">
+            <a class="nav-link text-light" href="https://www.youtube.com/c/OpenClusterManagement" target="_blank">
                 <i class="bi bi-youtube"></i>
             </a>
           </li>
@@ -74,7 +74,7 @@
             </a>
           </li>
           <li class="nav-item pe-2">
-            <a class="nav-link text-light" href="https://kubernetes.slack.com/?redir=%2Farchives%2FC01GE7YSUUF" target="_blank">
+            <a class="nav-link text-light" href="https://kubernetes.slack.com/channels/open-cluster-mgmt" target="_blank">
               <i class="bi bi-slack"></i>
             </a>
           </li>
@@ -106,6 +106,9 @@
                     <a class="navlink" href="/zh/concepts/architecture">架构</a>
                 </li>
                 <li>
+                    <a class="navlink" href="/zh/concepts/clusterclaim">集群声明</a>
+                </li>
+                <li>
                     <a class="navlink" href="/zh/concepts/managedcluster">托管集群</a>
                 </li>
                 <li>
@@ -119,6 +122,9 @@
                 </li>
                 <li>
                     <a class="navlink" href="/zh/concepts/addon">自定义插件</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/concepts/policy">Policy</a>
                 </li>
             </ul>
         </li>
@@ -169,6 +175,17 @@
                 </li>
             </ul>
         </li>
+        <li id="developer-guides">
+            <a class="navlink" href="/zh/developer-guides">开发指南</a>
+            <ul class="collapse">
+                <li>
+                    <a class="navlink" href="/zh/developer-guides/addon">Add-on 开发指南</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/developer-guides/vscode-extension">VScode Extension</a>
+                </li>
+            </ul>
+        </li>
         <li id="scenarios">
             <a class="navlink" href="/zh/scenarios">应用场景</a>
             <ul class="collapse">
@@ -176,8 +193,17 @@
                     <a class="navlink" href="/zh/scenarios/deploy-kubernetes-resources">部署Kubernetes资源</a>
                 </li>
                 <li>
+                    <a class="navlink" href="/zh/scenarios/distribute-workload-with-placement">通过placement分发工作负载</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/scenarios/extend-multicluster-scheduling-capabilities">扩展多集群调度能力</a>
+                </li>
+                <li>
                     <a class="navlink" href="/zh/scenarios/extending-managed-clusters">扩展集群模型</a>
                 </li>
+                <li>
+                    <a class="navlink" href="/zh/scenarios/integration-with-argocd">集成Argo CD</a>
+                </li>                
                 <li>
                     <a class="navlink" href="/zh/scenarios/pushing-kube-api-requests">向托管集群推送Kube API请求</a>
                 </li>
@@ -204,10 +230,10 @@
             <a class="navlink resource" href="https://github.com/open-cluster-management-io" target="_blank"><i class="bi bi-github"></i><span style="padding-left: 10px;">GitHub</span></a>
         </li>
         <li>
-            <a class="navlink resource" href="https://kubernetes.slack.com/archives/C01GE7YSUUF" target="_blank"><i class="bi bi-slack"></i><span style="padding-left: 10px;">Slack</span></a>
+            <a class="navlink resource" href="https://kubernetes.slack.com/channels/open-cluster-mgmt" target="_blank"><i class="bi bi-slack"></i><span style="padding-left: 10px;">Slack</span></a>
         </li>
         <li>
-            <a class="navlink resource" href="https://www.youtube.com/channel/UC7xxOh2jBM5Jfwt3fsBzOZw" target="_blank"><i class="bi bi-youtube"></i><span style="padding-left: 10px;">YouTube</span></a>
+            <a class="navlink resource" href="https://www.youtube.com/c/OpenClusterManagement" target="_blank"><i class="bi bi-youtube"></i><span style="padding-left: 10px;">YouTube</span></a>
         </li>
         <li>
             <a class="navlink resource" href="https://groups.google.com/g/open-cluster-management" target="_blank"><i class="bi bi-envelope-fill"></i><span style="padding-left: 10px;">Mailing group</span></a>
@@ -232,7 +258,7 @@
           <ul>
             <li><a href="#creating-a-managedclusterset">Creating a ManagedClusterSet</a></li>
             <li><a href="#adding-a-managedcluster-to-a-managedclusterset">Adding a ManagedCluster to a ManagedClusterSet</a></li>
-            <li><a href="#bind-the-clusterset-to-a-workspace-namespace">Bind the clusterset to a workspace namespace</a></li>
+            <li><a href="#binding-the-managedclusterset-to-a-workspace-namespace">Binding the ManagedClusterSet to a workspace namespace</a></li>
           </ul>
         </li>
         <li><a href="#a-glance-at-the-managedclusterset-api">A glance at the &ldquo;ManagedClusterSet&rdquo; API</a>
@@ -246,25 +272,31 @@
           </ul>
         </li>
         <li><a href="#default-managedclusterset">Default ManagedClusterSet</a></li>
+        <li><a href="#global-managedclusterset">Global ManagedClusterSet</a></li>
       </ul></nav><hr></div>
 
 
 <!-- spellchecker-enable -->
+<p><strong>API-CHANGE NOTE</strong>:</p>
+<p>The <code>ManagedClusterSet</code> and <code>ManagedClusterSetBinding</code> API v1alpha1 version will no longer be served in OCM v0.9.0.</p>
+<p>The <code>ManagedClusterSet</code> and <code>ManagedClusterSetBinding</code> API v1beta1 version will be deprecated in OCM v0.9.0.</p>
+<p>For Hosted Mode, The <code>ManagedClusterSet</code> and <code>ManagedClusterSetBinding</code> API only support v1beta1 in OCM v0.9.0</p>
+<ul>
+<li>Migrate manifests and API clients to use the <code>ManagedClusterSet</code> and <code>PlacementDecision</code> API v1beta1 version, available since OCM v0.5.0.</li>
+<li>All existing persisted objects are accessible via the new API.</li>
+<li>No notable changes</li>
+</ul>
 <h2 id="what-is-managedclusterset">What is ManagedClusterSet?</h2>
 <p><code>ManagedClusterSet</code> is a cluster scoped API in the hub cluster for grouping a
 few managed clusters into a &ldquo;set&rdquo; so that hub admin can operate these clusters
 altogether in a higher level. The concept is inspired by the an <a href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-multicluster/1645-multi-cluster-services-api#terminology">enhancement</a>
 from the Kubernetes SIG-Multicluster. Member clusters in the set are supposed
-to have common/similar attributes e.g. purpose of use, deployed regions, etc.
-Each <code>ManagedClusterSet</code> can be managed/administrated by different hub admins,
-and their RBAC permissions can also be isolated by binding the cluster set to a
-&ldquo;workspace namespace&rdquo; in the hub cluster. The cluster set admin can flexibly
-operate the member clusters in the workspace namespace using <a href="../placement">Placement</a>
-API, etc.</p>
-<p>The following picture shows the hierarchies of how the cluster set works:</p>
-<div style="text-align: center; padding: 20px;">
-   <img src="/clusterset-explain.png" alt="Clusterset" style="margin: 0 auto; width: 90%">
-</div>
+to have common/similar attributes e.g. purpose of use, deployed regions, etc.</p>
+<p><code>ManagedClusterSetBinding</code> is a namespace scoped API in the hub cluster to project
+a <code>ManagedClusterSet</code> into a certain namespace. Each <code>ManagedClusterSet</code> can be
+managed/administrated by different hub admins, and their RBAC permissions can
+also be isolated by binding the <code>ManagedClusterSet</code> to a &ldquo;workspace namespace&rdquo; in
+the hub cluster via <code>ManagedClusterSetBinding</code>.</p>
 <p>Note that <code>ManagedClusterSet</code> and &ldquo;workspace namespace&rdquo; has an <strong>M*N</strong>
 relationship:</p>
 <ul>
@@ -273,6 +305,12 @@ of that namespace can operate the member clusters from both sets.</li>
 <li>Bind one cluster set to multiple workspace namespace indicates that the
 cluster set can be operated from all the bound namespaces at the same time.</li>
 </ul>
+<p>The cluster set admin can flexibly operate the member clusters in the workspace
+namespace using <a href="../placement">Placement</a> API, etc.</p>
+<p>The following picture shows the hierarchies of how the cluster set works:</p>
+<div style="text-align: center; padding: 20px;">
+   <img src="/clusterset-explain.png" alt="Clusterset" style="margin: 0 auto; width: 90%">
+</div>
 <h2 id="operates-managedclusterset-using-clusteradm">Operates ManagedClusterSet using clusteradm</h2>
 <h3 id="creating-a-managedclusterset">Creating a ManagedClusterSet</h3>
 <p>Running the following command to create an example cluster set:</p>
@@ -293,7 +331,7 @@ example-clusterset                      <span style="color:#ae81ff">1</span> Man
 <p>Now the cluster set contains 1 valid cluster, and in order to operate that
 cluster set we are supposed to bind it to an existing namespace to make it a
 &ldquo;workspace namespace&rdquo;.</p>
-<h3 id="bind-the-clusterset-to-a-workspace-namespace">Bind the clusterset to a workspace namespace</h3>
+<h3 id="binding-the-managedclusterset-to-a-workspace-namespace">Binding the ManagedClusterSet to a workspace namespace</h3>
 <p>Running the following command to bind the cluster set to a namespace. Note that
 the namespace <strong>SHALL NOT</strong> be an existing &ldquo;cluster namespace&rdquo; (i.e. the
 namespace has the same name of a registered managed cluster).</p>
@@ -308,19 +346,54 @@ example-clusterset  default             <span style="color:#ae81ff">1</span> Man
 it a &ldquo;workspace namespace&rdquo;.</p>
 <h2 id="a-glance-at-the-managedclusterset-api">A glance at the &ldquo;ManagedClusterSet&rdquo; API</h2>
 <p>The <code>ManagedClusterSet</code> is a vanilla Kubernetes custom resource which can be
-checked by the command <code>kubectl get managedclusterset</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">apiVersion: cluster.open-cluster-management.io/v1beta1
-kind: ManagedClusterSet
-metadata:
-  name: example-clusterset
-spec: <span style="color:#f92672">{}</span>
-status:
-  conditions:
-  - lastTransitionTime: <span style="color:#e6db74">&#34;2022-02-21T09:24:38Z&#34;</span>
-    message: <span style="color:#ae81ff">1</span> ManagedClusters selected
-    reason: ClustersSelected
-    status: <span style="color:#e6db74">&#34;False&#34;</span>
-    type: ClusterSetEmpty
+checked by the command <code>kubectl get managedclusterset -oyaml</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">apiVersion</span>: cluster.open-cluster-management.io/v1beta2
+<span style="color:#66d9ef">kind</span>: ManagedClusterSet
+<span style="color:#66d9ef">metadata</span>:
+  <span style="color:#66d9ef">name</span>: example-clusterset
+<span style="color:#66d9ef">spec</span>: 
+  <span style="color:#66d9ef">clusterSelector</span>:
+    <span style="color:#66d9ef">selectorType</span>: ExclusiveClusterSetLabel
+<span style="color:#66d9ef">status</span>:
+  <span style="color:#66d9ef">conditions</span>:
+  - <span style="color:#66d9ef">lastTransitionTime</span>: <span style="color:#e6db74">&#34;2022-02-21T09:24:38Z&#34;</span>
+    <span style="color:#66d9ef">message</span>: <span style="color:#ae81ff">1</span> ManagedClusters selected
+    <span style="color:#66d9ef">reason</span>: ClustersSelected
+    <span style="color:#66d9ef">status</span>: <span style="color:#e6db74">&#34;False&#34;</span>
+    <span style="color:#66d9ef">type</span>: ClusterSetEmpty
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">apiVersion</span>: cluster.open-cluster-management.io/v1beta2
+<span style="color:#66d9ef">kind</span>: ManagedClusterSet
+<span style="color:#66d9ef">metadata</span>:
+  <span style="color:#66d9ef">name</span>: example-openshift-clusterset
+<span style="color:#66d9ef">spec</span>:
+  <span style="color:#66d9ef">clusterSelector</span>:
+    <span style="color:#66d9ef">labelSelector</span>: 
+      <span style="color:#66d9ef">matchLabels</span>:
+        <span style="color:#66d9ef">vendor</span>: OpenShift
+    <span style="color:#66d9ef">selectorType</span>: LabelSelector
+<span style="color:#66d9ef">status</span>:
+  <span style="color:#66d9ef">conditions</span>:
+  - <span style="color:#66d9ef">lastTransitionTime</span>: <span style="color:#e6db74">&#34;2022-06-20T08:23:28Z&#34;</span>
+    <span style="color:#66d9ef">message</span>: <span style="color:#ae81ff">1</span> ManagedClusters selected
+    <span style="color:#66d9ef">reason</span>: ClustersSelected
+    <span style="color:#66d9ef">status</span>: <span style="color:#e6db74">&#34;False&#34;</span>
+    <span style="color:#66d9ef">type</span>: ClusterSetEmpty
+</code></pre></div><p>The <code>ManagedClusterSetBinding</code> can also be checked by the command
+<code>kubectl get managedclustersetbinding -n &lt;workspace-namespace&gt; -oyaml</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">apiVersion</span>: cluster.open-cluster-management.io/v1beta2
+<span style="color:#66d9ef">kind</span>: ManagedClusterSetBinding
+<span style="color:#66d9ef">metadata</span>:
+  <span style="color:#66d9ef">name</span>: example-clusterset
+  <span style="color:#66d9ef">namespace</span>: default
+<span style="color:#66d9ef">spec</span>:
+  <span style="color:#66d9ef">clusterSet</span>: example-clusterset
+<span style="color:#66d9ef">status</span>:
+  <span style="color:#66d9ef">conditions</span>:
+  - <span style="color:#66d9ef">lastTransitionTime</span>: <span style="color:#e6db74">&#34;2022-12-19T09:55:10Z&#34;</span>
+    <span style="color:#66d9ef">message</span>: <span style="color:#e6db74">&#34;&#34;</span>
+    <span style="color:#66d9ef">reason</span>: ClusterSetBound
+    <span style="color:#66d9ef">status</span>: <span style="color:#e6db74">&#34;True&#34;</span>
+    <span style="color:#66d9ef">type</span>: Bound
 </code></pre></div><h3 id="clusterset-rbac-permission-control">Clusterset RBAC permission control</h3>
 <h4 id="adding-member-cluster-to-a-clusterset">Adding member cluster to a clusterset</h4>
 <p>Adding a new member cluster to a clusterset requires RBAC permission of
@@ -365,7 +438,28 @@ The user can move the cluster from the default clusterset to another clusterset 
 <pre><code>clusteradm clusterset set target-clusterset --clusters cluster-name
 </code></pre><p><code>default</code> clusterset is an alpha feature that can be disabled by disabling the feature gate in registration controller as:
 <a href="https://github.com/open-cluster-management-io/registration-operator/commit/55bc274d795ad0befc71f05aecd08810a4abfba1#diff-1026afceb1a224783dbf517bc281e71c1640636f5f001338f8185a0b4398b3d9R51"><code>- &quot;--feature-gates=DefaultClusterSet=false&quot;</code></a></p>
-
+<h2 id="global-managedclusterset">Global ManagedClusterSet</h2>
+<p>For easier management, we also introduce a ManagedClusterSet called <code>global</code>.
+A <code>global</code> ManagedClusterSet will be automatically created initially. The <code>global</code> ManagedClusterSet include all ManagedClusters.</p>
+<p><code>global</code> clusterset is an alpha feature that can be disabled by disabling the feature gate in registration controller as:
+<a href="https://github.com/open-cluster-management-io/registration-operator/commit/55bc274d795ad0befc71f05aecd08810a4abfba1#diff-1026afceb1a224783dbf517bc281e71c1640636f5f001338f8185a0b4398b3d9R51"><code>- &quot;--feature-gates=DefaultClusterSet=false&quot;</code></a></p>
+<p><code>global</code> ManagedClusterSet detail:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">apiVersion</span>: cluster.open-cluster-management.io/v1beta2
+<span style="color:#66d9ef">kind</span>: ManagedClusterSet
+<span style="color:#66d9ef">metadata</span>:
+  <span style="color:#66d9ef">name</span>: global
+<span style="color:#66d9ef">spec</span>:
+  <span style="color:#66d9ef">clusterSelector</span>:
+    <span style="color:#66d9ef">labelSelector</span>: {}
+    <span style="color:#66d9ef">selectorType</span>: LabelSelector
+<span style="color:#66d9ef">status</span>:
+  <span style="color:#66d9ef">conditions</span>:
+  - <span style="color:#66d9ef">lastTransitionTime</span>: <span style="color:#e6db74">&#34;2022-06-20T08:23:28Z&#34;</span>
+    <span style="color:#66d9ef">message</span>: <span style="color:#ae81ff">1</span> ManagedClusters selected
+    <span style="color:#66d9ef">reason</span>: ClustersSelected
+    <span style="color:#66d9ef">status</span>: <span style="color:#e6db74">&#34;False&#34;</span>
+    <span style="color:#66d9ef">type</span>: ClusterSetEmpty
+</code></pre></div>
 </div>
 <script type="text/javascript" src="/clipboard-copy.js"></script>
 </div>

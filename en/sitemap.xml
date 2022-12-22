@@ -26,7 +26,19 @@
     </url>
     
     <url>
+        <loc>http://open-cluster-management.io/scenarios/distribute-workload-with-placement</loc>
+    </url>
+    
+    <url>
+        <loc>http://open-cluster-management.io/scenarios/extend-multicluster-scheduling-capabilities</loc>
+    </url>
+    
+    <url>
         <loc>http://open-cluster-management.io/scenarios/extending-managed-clusters</loc>
+    </url>
+    
+    <url>
+        <loc>http://open-cluster-management.io/scenarios/integration-with-argocd</loc>
     </url>
     
     <url>
@@ -39,6 +51,10 @@
     
     <url>
         <loc>http://open-cluster-management.io/getting-started/administration/upgrading</loc>
+    </url>
+    
+    <url>
+        <loc>http://open-cluster-management.io/concepts/clusterclaim</loc>
     </url>
     
     <url>
@@ -78,6 +94,14 @@
     </url>
     
     <url>
+        <loc>http://open-cluster-management.io/developer-guides</loc>
+    </url>
+    
+    <url>
+        <loc>http://open-cluster-management.io/developer-guides/addon</loc>
+    </url>
+    
+    <url>
         <loc>http://open-cluster-management.io/getting-started/integration</loc>
     </url>
     
@@ -99,6 +123,14 @@
     
     <url>
         <loc>http://open-cluster-management.io/getting-started/integration/managed-serviceaccount</loc>
+    </url>
+    
+    <url>
+        <loc>http://open-cluster-management.io/concepts/policy</loc>
+    </url>
+    
+    <url>
+        <loc>http://open-cluster-management.io/developer-guides/vscode-extension</loc>
     </url>
     
     <url>
@@ -138,6 +170,14 @@
     </url>
     
     <url>
+        <loc>http://open-cluster-management.io/governance-policy-addon-controller</loc>
+    </url>
+    
+    <url>
+        <loc>http://open-cluster-management.io/governance-policy-framework-addon</loc>
+    </url>
+    
+    <url>
         <loc>http://open-cluster-management.io/governance-policy-propagator</loc>
     </url>
     
@@ -166,6 +206,10 @@
     </url>
     
     <url>
+        <loc>http://open-cluster-management.io/multicluster-controlplane</loc>
+    </url>
+    
+    <url>
         <loc>http://open-cluster-management.io</loc>
     </url>
     
@@ -174,7 +218,28 @@
     </url>
     
     <url>
+        <loc>http://open-cluster-management.io/placement</loc>
+    </url>
+    
+    <url>
+        <loc>http://open-cluster-management.io/registration</loc>
+    </url>
+    
+    <url>
+        <loc>http://open-cluster-management.io/work</loc>
+    </url>
+    
+    <url>
         <loc>http://open-cluster-management.io/api?go-get=1</loc>
+    </url>
+    <url>
+        <loc>http://open-cluster-management.io/registration?go-get=1</loc>
+    </url>
+    <url>
+        <loc>http://open-cluster-management.io/work?go-get=1</loc>
+    </url>
+    <url>
+        <loc>http://open-cluster-management.io/placement?go-get=1</loc>
     </url>
     <url>
         <loc>http://open-cluster-management.io/clusteradm?go-get=1</loc>
@@ -198,6 +263,15 @@
         <loc>http://open-cluster-management.io/config-policy-controller?go-get=1</loc>
     </url>
     <url>
+        <loc>http://open-cluster-management.io/governance-policy-addon-controller?go-get=1</loc>
+    </url>
+    <url>
+        <loc>http://open-cluster-management.io/governance-policy-framework-addon?go-get=1</loc>
+    </url>
+    <url>
+        <loc>http://open-cluster-management.io/governance-policy-nucleus?go-get=1</loc>
+    </url>
+    <url>
         <loc>http://open-cluster-management.io/governance-policy-propagator?go-get=1</loc>
     </url>
     <url>
@@ -211,5 +285,8 @@
     </url>
     <url>
         <loc>http://open-cluster-management.io/ocm-kustomize-generator-plugins?go-get=1</loc>
+    </url>
+    <url>
+        <loc>http://open-cluster-management.io/multicluster-controlplane?go-get=1</loc>
     </url>
 </urlset>

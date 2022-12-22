@@ -64,7 +64,7 @@
             </ul>
           </li>
           <li class="nav-item pe-2">
-            <a class="nav-link text-light" href="https://www.youtube.com/channel/UC7xxOh2jBM5Jfwt3fsBzOZw" target="_blank">
+            <a class="nav-link text-light" href="https://www.youtube.com/c/OpenClusterManagement" target="_blank">
                 <i class="bi bi-youtube"></i>
             </a>
           </li>
@@ -74,7 +74,7 @@
             </a>
           </li>
           <li class="nav-item pe-2">
-            <a class="nav-link text-light" href="https://kubernetes.slack.com/?redir=%2Farchives%2FC01GE7YSUUF" target="_blank">
+            <a class="nav-link text-light" href="https://kubernetes.slack.com/channels/open-cluster-mgmt" target="_blank">
               <i class="bi bi-slack"></i>
             </a>
           </li>
@@ -106,6 +106,9 @@
                     <a class="navlink" href="/zh/concepts/architecture">架构</a>
                 </li>
                 <li>
+                    <a class="navlink" href="/zh/concepts/clusterclaim">集群声明</a>
+                </li>
+                <li>
                     <a class="navlink" href="/zh/concepts/managedcluster">托管集群</a>
                 </li>
                 <li>
@@ -119,6 +122,9 @@
                 </li>
                 <li>
                     <a class="navlink" href="/zh/concepts/addon">自定义插件</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/concepts/policy">Policy</a>
                 </li>
             </ul>
         </li>
@@ -169,6 +175,17 @@
                 </li>
             </ul>
         </li>
+        <li id="developer-guides">
+            <a class="navlink" href="/zh/developer-guides">开发指南</a>
+            <ul class="collapse">
+                <li>
+                    <a class="navlink" href="/zh/developer-guides/addon">Add-on 开发指南</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/developer-guides/vscode-extension">VScode Extension</a>
+                </li>
+            </ul>
+        </li>
         <li id="scenarios">
             <a class="navlink" href="/zh/scenarios">应用场景</a>
             <ul class="collapse">
@@ -176,8 +193,17 @@
                     <a class="navlink" href="/zh/scenarios/deploy-kubernetes-resources">部署Kubernetes资源</a>
                 </li>
                 <li>
+                    <a class="navlink" href="/zh/scenarios/distribute-workload-with-placement">通过placement分发工作负载</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/scenarios/extend-multicluster-scheduling-capabilities">扩展多集群调度能力</a>
+                </li>
+                <li>
                     <a class="navlink" href="/zh/scenarios/extending-managed-clusters">扩展集群模型</a>
                 </li>
+                <li>
+                    <a class="navlink" href="/zh/scenarios/integration-with-argocd">集成Argo CD</a>
+                </li>                
                 <li>
                     <a class="navlink" href="/zh/scenarios/pushing-kube-api-requests">向托管集群推送Kube API请求</a>
                 </li>
@@ -204,10 +230,10 @@
             <a class="navlink resource" href="https://github.com/open-cluster-management-io" target="_blank"><i class="bi bi-github"></i><span style="padding-left: 10px;">GitHub</span></a>
         </li>
         <li>
-            <a class="navlink resource" href="https://kubernetes.slack.com/archives/C01GE7YSUUF" target="_blank"><i class="bi bi-slack"></i><span style="padding-left: 10px;">Slack</span></a>
+            <a class="navlink resource" href="https://kubernetes.slack.com/channels/open-cluster-mgmt" target="_blank"><i class="bi bi-slack"></i><span style="padding-left: 10px;">Slack</span></a>
         </li>
         <li>
-            <a class="navlink resource" href="https://www.youtube.com/channel/UC7xxOh2jBM5Jfwt3fsBzOZw" target="_blank"><i class="bi bi-youtube"></i><span style="padding-left: 10px;">YouTube</span></a>
+            <a class="navlink resource" href="https://www.youtube.com/c/OpenClusterManagement" target="_blank"><i class="bi bi-youtube"></i><span style="padding-left: 10px;">YouTube</span></a>
         </li>
         <li>
             <a class="navlink resource" href="https://groups.google.com/g/open-cluster-management" target="_blank"><i class="bi bi-envelope-fill"></i><span style="padding-left: 10px;">Mailing group</span></a>
@@ -224,7 +250,7 @@
     <h1>贡献</h1>
     <p>We know you&rsquo;ve got great ideas for improving Open Cluster Management. So roll up your sleeves and come join us in the community!</p>
 <h2 id="getting-started">Getting Started</h2>
-<p>All contributions are welcome! Open Cluster Management uses the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2 license</a>. Please open issues for any bugs or problems you encounter, ask questions in the <a href="https://kubernetes.slack.com/archives/C01GE7YSUUF">#open-cluster-mgmt</a> on Kubernetes Slack Channel, or get involved joining the open-cluster-management <a href="https://groups.google.com/g/open-cluster-management">mailing group</a>.</p>
+<p>All contributions are welcome! Open Cluster Management uses the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2 license</a>. Please open issues for any bugs or problems you encounter, ask questions in the <a href="https://kubernetes.slack.com/channels/open-cluster-mgmt">#open-cluster-mgmt</a> on Kubernetes Slack Channel, or get involved joining the open-cluster-management <a href="https://groups.google.com/g/open-cluster-management">mailing group</a>.</p>
 <h2 id="contribute-to-the-source">Contribute to the Source</h2>
 <ul>
 <li>Join the <a href="https://groups.google.com/g/open-cluster-management">Mailing group</a></li>
@@ -243,7 +269,7 @@ contribution. See the <a href="https://github.com/open-cluster-management-io/com
 <h2 id="talk-to-us">Talk to Us</h2>
 <ul>
 <li>Follow the <a href="https://groups.google.com/g/open-cluster-management">Mailing group</a></li>
-<li>Chat with us in the <a href="https://kubernetes.slack.com/archives/C01GE7YSUUF">#open-cluster-mgmt</a> on Kubernetes Slack Channel</li>
+<li>Chat with us in the <a href="https://kubernetes.slack.com/channels/open-cluster-mgmt">#open-cluster-mgmt</a> on Kubernetes Slack Channel</li>
 </ul>
 
 </div>

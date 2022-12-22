@@ -64,7 +64,7 @@
             </ul>
           </li>
           <li class="nav-item pe-2">
-            <a class="nav-link text-light" href="https://www.youtube.com/channel/UC7xxOh2jBM5Jfwt3fsBzOZw" target="_blank">
+            <a class="nav-link text-light" href="https://www.youtube.com/c/OpenClusterManagement" target="_blank">
                 <i class="bi bi-youtube"></i>
             </a>
           </li>
@@ -74,7 +74,7 @@
             </a>
           </li>
           <li class="nav-item pe-2">
-            <a class="nav-link text-light" href="https://kubernetes.slack.com/?redir=%2Farchives%2FC01GE7YSUUF" target="_blank">
+            <a class="nav-link text-light" href="https://kubernetes.slack.com/channels/open-cluster-mgmt" target="_blank">
               <i class="bi bi-slack"></i>
             </a>
           </li>
@@ -106,6 +106,9 @@
                     <a class="navlink" href="/zh/concepts/architecture">架构</a>
                 </li>
                 <li>
+                    <a class="navlink" href="/zh/concepts/clusterclaim">集群声明</a>
+                </li>
+                <li>
                     <a class="navlink" href="/zh/concepts/managedcluster">托管集群</a>
                 </li>
                 <li>
@@ -119,6 +122,9 @@
                 </li>
                 <li>
                     <a class="navlink" href="/zh/concepts/addon">自定义插件</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/concepts/policy">Policy</a>
                 </li>
             </ul>
         </li>
@@ -169,6 +175,17 @@
                 </li>
             </ul>
         </li>
+        <li id="developer-guides">
+            <a class="navlink" href="/zh/developer-guides">开发指南</a>
+            <ul class="collapse">
+                <li>
+                    <a class="navlink" href="/zh/developer-guides/addon">Add-on 开发指南</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/developer-guides/vscode-extension">VScode Extension</a>
+                </li>
+            </ul>
+        </li>
         <li id="scenarios">
             <a class="navlink" href="/zh/scenarios">应用场景</a>
             <ul class="collapse">
@@ -176,8 +193,17 @@
                     <a class="navlink" href="/zh/scenarios/deploy-kubernetes-resources">部署Kubernetes资源</a>
                 </li>
                 <li>
+                    <a class="navlink" href="/zh/scenarios/distribute-workload-with-placement">通过placement分发工作负载</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/scenarios/extend-multicluster-scheduling-capabilities">扩展多集群调度能力</a>
+                </li>
+                <li>
                     <a class="navlink" href="/zh/scenarios/extending-managed-clusters">扩展集群模型</a>
                 </li>
+                <li>
+                    <a class="navlink" href="/zh/scenarios/integration-with-argocd">集成Argo CD</a>
+                </li>                
                 <li>
                     <a class="navlink" href="/zh/scenarios/pushing-kube-api-requests">向托管集群推送Kube API请求</a>
                 </li>
@@ -204,10 +230,10 @@
             <a class="navlink resource" href="https://github.com/open-cluster-management-io" target="_blank"><i class="bi bi-github"></i><span style="padding-left: 10px;">GitHub</span></a>
         </li>
         <li>
-            <a class="navlink resource" href="https://kubernetes.slack.com/archives/C01GE7YSUUF" target="_blank"><i class="bi bi-slack"></i><span style="padding-left: 10px;">Slack</span></a>
+            <a class="navlink resource" href="https://kubernetes.slack.com/channels/open-cluster-mgmt" target="_blank"><i class="bi bi-slack"></i><span style="padding-left: 10px;">Slack</span></a>
         </li>
         <li>
-            <a class="navlink resource" href="https://www.youtube.com/channel/UC7xxOh2jBM5Jfwt3fsBzOZw" target="_blank"><i class="bi bi-youtube"></i><span style="padding-left: 10px;">YouTube</span></a>
+            <a class="navlink resource" href="https://www.youtube.com/c/OpenClusterManagement" target="_blank"><i class="bi bi-youtube"></i><span style="padding-left: 10px;">YouTube</span></a>
         </li>
         <li>
             <a class="navlink resource" href="https://groups.google.com/g/open-cluster-management" target="_blank"><i class="bi bi-envelope-fill"></i><span style="padding-left: 10px;">Mailing group</span></a>
@@ -253,27 +279,27 @@ account:</p>
 <h2 id="installation">Installation</h2>
 <h3 id="adding-helm-chart-repo">Adding helm chart repo</h3>
 <p>Making sure the following OCM addons are discovered by your helm environment:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm repo add ocm https://open-cluster-management.oss-us-west-1.aliyuncs.com
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm repo add ocm https://openclustermanagement.blob.core.windows.net/releases/
 $ helm repo update
 $ helm search repo ocm
 NAME                             	CHART VERSION	APP VERSION	DESCRIPTION                                   
-ocm/cluster-gateway-addon-manager	1.1.10        	1.0.0      	A Helm chart <span style="color:#66d9ef">for</span> Cluster-Gateway Addon-Manager
-ocm/cluster-proxy                	0.1.4        	1.0.0      	A Helm chart <span style="color:#66d9ef">for</span> Cluster-Proxy OCM Addon      
-ocm/managed-serviceaccount       	0.1.1        	1.0.0      	A Helm chart <span style="color:#66d9ef">for</span> Managed ServiceAccount Addon 
+ocm/cluster-gateway-addon-manager	1.3.2      	1.0.0      	A Helm chart <span style="color:#66d9ef">for</span> Cluster-Gateway Addon-Manager
+ocm/cluster-proxy                	0.2.0        	1.0.0      	A Helm chart <span style="color:#66d9ef">for</span> Cluster-Proxy OCM Addon      
+ocm/managed-serviceaccount       	0.2.0        	1.0.0      	A Helm chart <span style="color:#66d9ef">for</span> Managed ServiceAccount Addon 
 </code></pre></div><h3 id="install-the-ocm-addons">Install the OCM addons</h3>
 <p>By the following helm commands to install the addons:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm -n open-cluster-management-addon install cluster-proxy ocm/cluster-proxy
 $ helm -n open-cluster-management-addon install managed-serviceaccount ocm/managed-serviceaccount
-$ helm -n open-cluster-management-addon install cluster-gateway ocm/cluster-gateway-addon-manager <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    <span style="color:#75715e"># Delegating for secret discovery to &#34;managed-serviceaccount&#34; addon.</span>
-    <span style="color:#75715e"># Skip the option for manual secret management.</span>
-    --set manualSecretManagement<span style="color:#f92672">=</span>false <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    <span style="color:#75715e"># Enabling konnectivity tunnels via &#34;cluster-proxy&#34; addon.</span>
-    <span style="color:#75715e"># Skip the option if the hub cluster and the managed clusters are already mutually accessible.</span>
+$ helm -n open-cluster-management-addon install cluster-gateway ocm/cluster-gateway-addon-manager  <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    <span style="color:#75715e"># Delegating for secret discovery to &#34;managed-serviceaccount&#34; addon.                           \</span>
+    <span style="color:#75715e"># Skip the option for manual secret management.                                                \</span>
+    --set manualSecretManagement<span style="color:#f92672">=</span>false                                                             <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    <span style="color:#75715e"># Enabling konnectivity tunnels via &#34;cluster-proxy&#34; addon.                                     \</span>
+    <span style="color:#75715e"># Skip the option if the hub cluster and the managed clusters are already mutually accessible. \</span>
     --set konnectivityEgress<span style="color:#f92672">=</span>true
 </code></pre></div><h3 id="confirm-addon-installation">Confirm addon installation</h3>
 <p>The commands above installs the addon manager into the hub cluster, and the
-manager will creating <code>ManagedClusterAddon</code> automatically into the cluster
+manager will creating <code>ManagedClusterAddOn</code> automatically into the cluster
 namespaces representing the addon is plumbed into the managed cluster. In order
 to check their status, run:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get managedclusteraddon -A

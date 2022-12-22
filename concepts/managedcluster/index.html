@@ -62,7 +62,7 @@
             </ul>
           </li>
           <li class="nav-item pe-2">
-            <a class="nav-link text-light" href="https://www.youtube.com/channel/UC7xxOh2jBM5Jfwt3fsBzOZw" target="_blank">
+            <a class="nav-link text-light" href="https://www.youtube.com/c/OpenClusterManagement" target="_blank">
                 <i class="bi bi-youtube"></i>
             </a>
           </li>
@@ -72,7 +72,7 @@
             </a>
           </li>
           <li class="nav-item pe-2">
-            <a class="nav-link text-light" href="https://kubernetes.slack.com/?redir=%2Farchives%2FC01GE7YSUUF" target="_blank">
+            <a class="nav-link text-light" href="https://kubernetes.slack.com/channels/open-cluster-mgmt" target="_blank">
               <i class="bi bi-slack"></i>
             </a>
           </li>
@@ -102,6 +102,9 @@
                     <a class="navlink" href="/concepts/architecture">Architecture</a>
                 </li>
                 <li>
+                    <a class="navlink" href="/concepts/clusterclaim">ClusterClaim</a>
+                </li>
+                <li>
                     <a class="navlink" href="/concepts/managedcluster">ManagedCluster</a>
                 </li>
                 <li>
@@ -115,6 +118,9 @@
                 </li>
                 <li>
                     <a class="navlink" href="/concepts/addon">Add-ons</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/concepts/policy">Policy</a>
                 </li>
             </ul>
         </li>
@@ -165,6 +171,17 @@
                 </li>
             </ul>
         </li>
+        <li id="developer-guides">
+            <a class="navlink" href="/developer-guides">Developer Guides</a>
+            <ul class="collapse">
+                <li>
+                    <a class="navlink" href="/developer-guides/addon">Add-on Developer Guide</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/developer-guides/vscode-extension">VScode Extension</a>
+                </li>
+            </ul>
+        </li>
         <li id="scenarios">
             <a class="navlink" href="/scenarios">Scenarios</a>
             <ul class="collapse">
@@ -172,8 +189,17 @@
                     <a class="navlink" href="/scenarios/deploy-kubernetes-resources">Deploy Kubernetes Resources</a>
                 </li>
                 <li>
+                    <a class="navlink" href="/scenarios/distribute-workload-with-placement">Distribute Workload With Placement</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/scenarios/extend-multicluster-scheduling-capabilities">Extend Multicluster Scheduling Capabilities</a>
+                </li>
+                <li>
                     <a class="navlink" href="/scenarios/extending-managed-clusters">Extend Managed Clusters</a>
                 </li>
+                <li>
+                    <a class="navlink" href="/scenarios/integration-with-argocd">Integration with Argo CD</a>
+                </li>                
                 <li>
                     <a class="navlink" href="/scenarios/pushing-kube-api-requests">Pushing Kube API Requests to the Managed Clusters</a>
                 </li>
@@ -200,10 +226,10 @@
             <a class="navlink resource" href="https://github.com/open-cluster-management-io" target="_blank"><i class="bi bi-github"></i><span style="padding-left: 10px;">GitHub</span></a>
         </li>
         <li>
-            <a class="navlink resource" href="https://kubernetes.slack.com/archives/C01GE7YSUUF" target="_blank"><i class="bi bi-slack"></i><span style="padding-left: 10px;">Slack</span></a>
+            <a class="navlink resource" href="https://kubernetes.slack.com/channels/open-cluster-mgmt" target="_blank"><i class="bi bi-slack"></i><span style="padding-left: 10px;">Slack</span></a>
         </li>
         <li>
-            <a class="navlink resource" href="https://www.youtube.com/channel/UC7xxOh2jBM5Jfwt3fsBzOZw" target="_blank"><i class="bi bi-youtube"></i><span style="padding-left: 10px;">YouTube</span></a>
+            <a class="navlink resource" href="https://www.youtube.com/c/OpenClusterManagement" target="_blank"><i class="bi bi-youtube"></i><span style="padding-left: 10px;">YouTube</span></a>
         </li>
         <li>
             <a class="navlink resource" href="https://groups.google.com/g/open-cluster-management" target="_blank"><i class="bi bi-envelope-fill"></i><span style="padding-left: 10px;">Mailing group</span></a>
@@ -246,7 +272,8 @@
             </li>
           </ul>
         </li>
-        <li><a href="#managedclusterset">ManagedClusterSet</a></li>
+        <li><a href="#managed-clusters-certificate-rotation">Managed Cluster&rsquo;s certificate rotation</a></li>
+        <li><a href="#whats-next">What&rsquo;s next?</a></li>
       </ul></nav><hr></div>
 
 
@@ -275,7 +302,7 @@ registration agent which requires a bootstrap kubeconfig e.g.:</p>
 </code></pre></div><p>A minimal RBAC permission required for the subject in the bootstrap kubeconfig
 will be:</p>
 <ul>
-<li><code>CertficateSigningRequest</code>'s &ldquo;get&rdquo;, &ldquo;list&rdquo;, &ldquo;watch&rdquo;, &ldquo;create&rdquo;, &ldquo;update&rdquo;.</li>
+<li><code>CertificateSigningRequest</code>'s &ldquo;get&rdquo;, &ldquo;list&rdquo;, &ldquo;watch&rdquo;, &ldquo;create&rdquo;, &ldquo;update&rdquo;.</li>
 <li><code>ManagedCluster</code>'s &ldquo;get&rdquo;, &ldquo;list&rdquo;, &ldquo;create&rdquo;, &ldquo;update&rdquo;</li>
 </ul>
 <p>Note that ideally the bootstrap kubeconfig is supposed to live shortly
@@ -286,7 +313,7 @@ command-line tool <code>clusteradm</code> to manage the whole registration proce
 <h4 id="approving-registration">Approving registration</h4>
 <p>When we&rsquo;re registering a new cluster into OCM, the registration agent will be
 starting by creating an unaccepted <code>ManagedCluster</code> into the hub cluster along
-with a temporary <a href="https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/">CertficateSigningRequest (CSR)</a>
+with a temporary <a href="https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests/">CertificateSigningRequest (CSR)</a>
 resource. The cluster will be accepted by the hub control plan, if the
 following requirements is meet:</p>
 <ul>
@@ -323,7 +350,7 @@ overridden by setting <code>.spec.leaseDurationSeconds</code> on the <code>Manag
 in the status of the <code>ManagedCluster</code>, e.g.:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">  <span style="color:#66d9ef">status</span>:
     <span style="color:#66d9ef">version</span>:
-      <span style="color:#66d9ef">kubernetes</span>: v1<span style="color:#ae81ff">.20.11</span>-aliyun<span style="color:#ae81ff">.1</span>
+      <span style="color:#66d9ef">kubernetes</span>: v1<span style="color:#ae81ff">.20.11</span>
     <span style="color:#66d9ef">allocatable</span>:
       <span style="color:#66d9ef">cpu</span>: 11700m
       <span style="color:#66d9ef">ephemeral-storage</span>: <span style="color:#e6db74">&#34;342068531454&#34;</span>
@@ -362,7 +389,9 @@ tolerate the taint. Valid effects are
 they tolerate this taint. The cluster will be removed from the placement
 decision if it has already been selected by the Placement.</li>
 <li><code>PreferNoSelect</code>. It means the scheduler tries not to select the cluster,
-rather than prohibiting Placements from selecting the cluster entirely.</li>
+rather than prohibiting Placements from selecting the cluster entirely.
+(This is not implemented yet, currently clusters with effect <code>PreferNoSelect</code>
+will always be selected.)</li>
 <li><code>NoSelectIfNew</code>. It means Placements are not allowed to select the cluster
 unless: 1) they tolerate the taint; 2) they have already had the cluster in
 their cluster decisions;</li>
@@ -457,25 +486,16 @@ effective cluster role resource:</p>
 <p>The admin of the managed cluster can disable the prescriptions from hub cluster
 by scaling the OCM klusterlet agents to <code>0</code>. Or just permanently deleting the
 agent components from the managed cluster.</p>
-<h2 id="managedclusterset">ManagedClusterSet</h2>
-<p><code>ManagedClusterSet</code> is a cluster scoped API on the hub cluster to define a
-group of <code>ManagedCluster</code>s. Practically it&rsquo;s a common case for hub cluster to
-group the existing managed clusters according to their deploying environment
-or data-center. For instance, you can create <code>dev</code>, <code>staging</code>, <code>prod</code>
-<code>ManagedClusterSet</code> for different purposes. Or you can create <code>north-america</code>,
-<code>europe</code>, <code>apac</code> <code>ManagedClusterSet</code> based on the region of the <code>ManagedCluster</code>.</p>
-<p>To add a <code>ManagedCluster</code> to a <code>ManagedClusterSet</code>, user needs to set a label
-<code>cluster.open-cluster-management.io/clusterset={clusterset name}</code> on the
-<code>ManagedCluster</code>. The user must have the <code>create</code> permission to
-<code>managedclusterset/join</code> resource to add a <code>ManagedCluster</code> to a
-<code>ManagedClusterSet</code>.</p>
-<p>An example of a <code>ManagedClusterSet</code> resource is shown in the following example.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">apiVersion</span>: cluster.open-cluster-management.io/v1beta1
-<span style="color:#66d9ef">kind</span>: ManagedClusterSet
-<span style="color:#66d9ef">metadata</span>:
-  <span style="color:#66d9ef">name</span>: prod
-</code></pre></div><p>Furthermore, we can do advanced cluster matching/selecting within a
-<code>ManagedClusterSet</code> using the <a href="https://github.com/open-cluster-management-io/placement">placement</a>
+<h2 id="managed-clusters-certificate-rotation">Managed Cluster&rsquo;s certificate rotation</h2>
+<p>The certificates used by the agents from the managed cluster to talk to
+the hub control plane will be periodically rotated with an ephemeral and random
+identity. The following picture shows the automated certificate rotation works.</p>
+<div style="text-align: center; padding: 20px;">
+   <img src="/registration-process.png" alt="Registration Process" style="margin: 0 auto; width: 80%">
+</div>
+<h2 id="whats-next">What&rsquo;s next?</h2>
+<p>Furthermore, we can do advanced cluster matching/selecting within a
+<a href="./managedclusterset.md">managedclusterset</a> using the <a href="./placement.md">placement</a>
 module.</p>
 
 </div>

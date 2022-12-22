@@ -64,7 +64,7 @@
             </ul>
           </li>
           <li class="nav-item pe-2">
-            <a class="nav-link text-light" href="https://www.youtube.com/channel/UC7xxOh2jBM5Jfwt3fsBzOZw" target="_blank">
+            <a class="nav-link text-light" href="https://www.youtube.com/c/OpenClusterManagement" target="_blank">
                 <i class="bi bi-youtube"></i>
             </a>
           </li>
@@ -74,7 +74,7 @@
             </a>
           </li>
           <li class="nav-item pe-2">
-            <a class="nav-link text-light" href="https://kubernetes.slack.com/?redir=%2Farchives%2FC01GE7YSUUF" target="_blank">
+            <a class="nav-link text-light" href="https://kubernetes.slack.com/channels/open-cluster-mgmt" target="_blank">
               <i class="bi bi-slack"></i>
             </a>
           </li>
@@ -106,6 +106,9 @@
                     <a class="navlink" href="/zh/concepts/architecture">架构</a>
                 </li>
                 <li>
+                    <a class="navlink" href="/zh/concepts/clusterclaim">集群声明</a>
+                </li>
+                <li>
                     <a class="navlink" href="/zh/concepts/managedcluster">托管集群</a>
                 </li>
                 <li>
@@ -119,6 +122,9 @@
                 </li>
                 <li>
                     <a class="navlink" href="/zh/concepts/addon">自定义插件</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/concepts/policy">Policy</a>
                 </li>
             </ul>
         </li>
@@ -169,6 +175,17 @@
                 </li>
             </ul>
         </li>
+        <li id="developer-guides">
+            <a class="navlink" href="/zh/developer-guides">开发指南</a>
+            <ul class="collapse">
+                <li>
+                    <a class="navlink" href="/zh/developer-guides/addon">Add-on 开发指南</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/developer-guides/vscode-extension">VScode Extension</a>
+                </li>
+            </ul>
+        </li>
         <li id="scenarios">
             <a class="navlink" href="/zh/scenarios">应用场景</a>
             <ul class="collapse">
@@ -176,8 +193,17 @@
                     <a class="navlink" href="/zh/scenarios/deploy-kubernetes-resources">部署Kubernetes资源</a>
                 </li>
                 <li>
+                    <a class="navlink" href="/zh/scenarios/distribute-workload-with-placement">通过placement分发工作负载</a>
+                </li>
+                <li>
+                    <a class="navlink" href="/zh/scenarios/extend-multicluster-scheduling-capabilities">扩展多集群调度能力</a>
+                </li>
+                <li>
                     <a class="navlink" href="/zh/scenarios/extending-managed-clusters">扩展集群模型</a>
                 </li>
+                <li>
+                    <a class="navlink" href="/zh/scenarios/integration-with-argocd">集成Argo CD</a>
+                </li>                
                 <li>
                     <a class="navlink" href="/zh/scenarios/pushing-kube-api-requests">向托管集群推送Kube API请求</a>
                 </li>
@@ -204,10 +230,10 @@
             <a class="navlink resource" href="https://github.com/open-cluster-management-io" target="_blank"><i class="bi bi-github"></i><span style="padding-left: 10px;">GitHub</span></a>
         </li>
         <li>
-            <a class="navlink resource" href="https://kubernetes.slack.com/archives/C01GE7YSUUF" target="_blank"><i class="bi bi-slack"></i><span style="padding-left: 10px;">Slack</span></a>
+            <a class="navlink resource" href="https://kubernetes.slack.com/channels/open-cluster-mgmt" target="_blank"><i class="bi bi-slack"></i><span style="padding-left: 10px;">Slack</span></a>
         </li>
         <li>
-            <a class="navlink resource" href="https://www.youtube.com/channel/UC7xxOh2jBM5Jfwt3fsBzOZw" target="_blank"><i class="bi bi-youtube"></i><span style="padding-left: 10px;">YouTube</span></a>
+            <a class="navlink resource" href="https://www.youtube.com/c/OpenClusterManagement" target="_blank"><i class="bi bi-youtube"></i><span style="padding-left: 10px;">YouTube</span></a>
         </li>
         <li>
             <a class="navlink resource" href="https://groups.google.com/g/open-cluster-management" target="_blank"><i class="bi bi-envelope-fill"></i><span style="padding-left: 10px;">Mailing group</span></a>
@@ -222,52 +248,128 @@
             <div class="col-10 col-md-9 padding-none">
 <div id="content">
     <h1>Policy framework</h1>
-    <p>The policy framework provides governance capability to gain visibility, and drive remediation for various security and configuration aspects to help IT administrators meet their requirements.</p>
+    <p>The policy framework provides governance capabilities to OCM managed Kubernetes clusters. Policies
+provide visibility and drive remediation for various security and configuration aspects to help IT
+administrators meet their requirements.</p>
 <!-- spellchecker-disable -->
 
 
 
   <div class="gdoc-toc gdoc-toc__level--6"><nav id="TableOfContents"><ul>
+        <li><a href="#api-concepts">API Concepts</a></li>
         <li><a href="#architecture">Architecture</a></li>
         <li><a href="#prerequisite">Prerequisite</a></li>
-        <li><a href="#install-from-prebuilt-images-on-quayio">Install from prebuilt images on Quay.io</a></li>
+        <li><a href="#install-the-governance-policy-framework-hub-components">Install the governance-policy-framework hub components</a>
+          <ul>
+            <li><a href="#install-via-clusteradm-cli">Install via Clusteradm CLI</a></li>
+            <li><a href="#install-from-source">Install from source</a></li>
+          </ul>
+        </li>
+        <li><a href="#deploy-the-synchronization-components-to-the-managed-clusters">Deploy the synchronization components to the managed cluster(s)</a>
+          <ul>
+            <li><a href="#deploy-via-clusteradm-cli">Deploy via Clusteradm CLI</a></li>
+            <li><a href="#deploy-from-source">Deploy from source</a></li>
+          </ul>
+        </li>
         <li><a href="#what-is-next">What is next</a></li>
       </ul></nav><hr></div>
 
 
 <!-- spellchecker-enable -->
-<h2 id="architecture">Architecture</h2>
+<h2 id="api-concepts">API Concepts</h2>
+<p>View the <a href="/concepts/policy">Policy API</a> page for additional details about the Policy API managed by
+the Policy Framework components, including:</p>
 <ul>
-<li>You can find the analysis of the architectural components <a href="https://github.com/open-cluster-management/governance-policy-framework#architecture">here</a></li>
+<li><a href="/concepts/policy#policy"><code>Policy</code></a></li>
+<li><a href="/concepts/policy#policyset"><code>PolicySet</code></a></li>
+<li><a href="/concepts/policy#placementbinding"><code>PlacementBinding</code></a></li>
 </ul>
+<h2 id="architecture">Architecture</h2>
 <div style="text-align: center; padding: 20px;">
    <img src="/policy-framework-architecture-diagram.jpg" alt="Policy framework architecture" style="margin: 0 auto; width: 80%">
 </div>
+<p>The governance policy framework distributes policies to managed clusters and collects results to
+send back to the hub cluster.</p>
+<ul>
+<li><a href="https://github.com/open-cluster-management-io/governance-policy-propagator">Policy propagator</a></li>
+<li><a href="https://github.com/open-cluster-management-io/governance-policy-framework-addon">Policy framework addon</a></li>
+</ul>
+<p>Note that in OCM versions newer than 0.8.x, the following controllers were consolidated into the
+<a href="https://github.com/open-cluster-management-io/governance-policy-framework-addon">policy framework addon</a>.</p>
+<ul>
+<li><a href="https://github.com/open-cluster-management-io/governance-policy-spec-sync">Policy spec sync</a></li>
+<li><a href="https://github.com/open-cluster-management-io/governance-policy-status-sync">Policy status sync</a></li>
+<li><a href="https://github.com/open-cluster-management-io/governance-policy-template-sync">Policy template sync</a></li>
+</ul>
 <h2 id="prerequisite">Prerequisite</h2>
 <p>You must meet the following prerequisites to install the policy framework:</p>
 <ul>
 <li>
-<p>Ensure <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl"><code>kubectl</code></a> and <a href="https://kubernetes-sigs.github.io/kustomize/installation"><code>kustomize</code></a> are installed.</p>
+<p>Ensure <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl"><code>kubectl</code></a> and
+<a href="https://kubectl.docs.kubernetes.io/installation/kustomize/"><code>kustomize</code></a> are installed.</p>
 </li>
 <li>
-<p>Ensure <a href="https://golang.org/doc/install">Golang</a> is installed, if you are planning to install from the source.</p>
+<p>Ensure <a href="https://golang.org/doc/install">Golang</a> is installed, if you are planning to install from
+the source.</p>
 </li>
 <li>
-<p>Ensure the <code>open-cluster-management</code> <em>cluster manager</em> is installed. See <a href="/getting-started/core/cluster-manager">Cluster Manager</a> for more information.</p>
+<p>Ensure the <code>open-cluster-management</code> <em>cluster manager</em> is installed. See
+<a href="/getting-started/core/cluster-manager">Cluster Manager</a> for more information.</p>
 </li>
 <li>
-<p>Ensure the <code>open-cluster-management</code> <em>klusterlet</em> is installed. See <a href="/getting-started/core/register-cluster">Klusterlet</a> for more information.</p>
+<p>Ensure the <code>open-cluster-management</code> <em>klusterlet</em> is installed. See
+<a href="/getting-started/core/register-cluster">Klusterlet</a> for more information.</p>
 </li>
 <li>
-<p>Ensure the <code>open-cluster-management</code> <em>application</em> is installed if you are using <code>PlacementRules</code> with your policies. See <a href="/getting-started/integration/app-lifecycle">Application management</a> for more information. While installing Application management for the <code>PlacementRules</code> API is the recommended approach, if you are only using the new <code>Placement</code> API, you can skip the Application management installation, but you do need to install the <code>PlacementRule</code> CRD with this command:</p>
+<p>If you are using <code>PlacementRules</code> with your policies, ensure the <code>open-cluster-management</code>
+<em>application</em> is installed . See
+<a href="/getting-started/integration/app-lifecycle">Application management</a> for more information. If you
+are using the default <code>Placement</code> API, you can skip the Application management installation, but
+you do need to install the <code>PlacementRule</code> CRD with this command:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell">kubectl apply -f https://raw.githubusercontent.com/open-cluster-management-io/multicloud-operators-subscription/main/deploy/hub-common/apps.open-cluster-management.io_placementrules_crd.yaml
 </code></pre></div></li>
 </ul>
-<h2 id="install-from-prebuilt-images-on-quayio">Install from prebuilt images on Quay.io</h2>
-<p>Complete the following steps to install the policy framework from prebuilt images on Quay.io:</p>
+<h2 id="install-the-governance-policy-framework-hub-components">Install the governance-policy-framework hub components</h2>
+<h3 id="install-via-clusteradm-cli">Install via Clusteradm CLI</h3>
+<p>Ensure <code>clusteradm</code> CLI is installed and is at least v0.3.0. Download and extract the
+<a href="https://github.com/open-cluster-management-io/clusteradm/releases/latest">clusteradm binary</a>. For
+more details see the
+<a href="https://github.com/open-cluster-management-io/clusteradm/blob/main/README.md#quick-start">clusteradm GitHub page</a>.</p>
 <ol>
 <li>
-<p>Deploy the policy Custom Resource Definitions (CRD) and policy propagator component to the <code>open-cluster-management</code> namespace on the hub cluster with the following commands:</p>
+<p>Deploy the policy framework controllers to the hub cluster:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell"><span style="color:#75715e"># The context name of the clusters in your kubeconfig</span>
+<span style="color:#75715e"># If the clusters are created by KinD, then the context name will the follow the pattern &#34;kind-&lt;cluster name&gt;&#34;.</span>
+export CTX_HUB_CLUSTER<span style="color:#f92672">=</span>&lt;your hub cluster context&gt;           <span style="color:#75715e"># export CTX_HUB_CLUSTER=kind-hub</span>
+export CTX_MANAGED_CLUSTER<span style="color:#f92672">=</span>&lt;your managed cluster context&gt;   <span style="color:#75715e"># export CTX_MANAGED_CLUSTER=kind-cluster1</span>
+
+<span style="color:#75715e"># Set the deployment namespace</span>
+export HUB_NAMESPACE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;open-cluster-management&#34;</span>
+
+<span style="color:#75715e"># Deploy the policy framework hub controllers</span>
+clusteradm install hub-addon --names governance-policy-framework --context <span style="color:#e6db74">${</span>CTX_HUB_CLUSTER<span style="color:#e6db74">}</span>
+</code></pre></div></li>
+<li>
+<p>Ensure the pods are running on the hub with the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell">$ kubectl get pods -n <span style="color:#e6db74">${</span>HUB_NAMESPACE<span style="color:#e6db74">}</span>
+NAME                                                       READY   STATUS    RESTARTS   AGE
+governance-policy-addon-controller-bc78cbcb4-529c2         1/1     Running   <span style="color:#ae81ff">0</span>          94s
+governance-policy-propagator-8c77f7f5f-kthvh               1/1     Running   <span style="color:#ae81ff">0</span>          94s
+</code></pre></div><ul>
+<li>See more about the governance-policy-framework components:
+<ul>
+<li><a href="https://github.com/open-cluster-management-io/governance-policy-propagator">policy-propagator</a></li>
+<li><a href="https://github.com/open-cluster-management-io/governance-policy-addon-controller">policy-addon-controller</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="install-from-source">Install from source</h3>
+<ol>
+<li>
+<p>Deploy the policy Custom Resource Definitions (CRD) and policy propagator component to the
+<code>open-cluster-management</code> namespace on the hub cluster with the following commands:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell"><span style="color:#75715e"># Configure kubectl to point to the hub cluster</span>
 kubectl config use-context <span style="color:#e6db74">${</span>CTX_HUB_CLUSTER<span style="color:#e6db74">}</span>
 
@@ -275,28 +377,59 @@ kubectl config use-context <span style="color:#e6db74">${</span>CTX_HUB_CLUSTER<
 export HUB_NAMESPACE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;open-cluster-management&#34;</span>
 kubectl create ns <span style="color:#e6db74">${</span>HUB_NAMESPACE<span style="color:#e6db74">}</span>
 
+<span style="color:#75715e"># Set the hub cluster name</span>
+export HUB_CLUSTER_NAME<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;hub&#34;</span>
+
+<span style="color:#75715e"># Set the hub kubeconfig file</span>
+export HUB_KUBECONFIG<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;hub-kubeconfig&#34;</span>
+
 <span style="color:#75715e"># Apply the CRDs</span>
-export GIT_PATH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://raw.githubusercontent.com/open-cluster-management-io/governance-policy-propagator/main/deploy&#34;</span>
-kubectl apply -f <span style="color:#e6db74">${</span>GIT_PATH<span style="color:#e6db74">}</span>/crds/policy.open-cluster-management.io_policies_crd.yaml
-kubectl apply -f <span style="color:#e6db74">${</span>GIT_PATH<span style="color:#e6db74">}</span>/crds/policy.open-cluster-management.io_placementbindings_crd.yaml
-kubectl apply -f <span style="color:#e6db74">${</span>GIT_PATH<span style="color:#e6db74">}</span>/crds/policy.open-cluster-management.io_policyautomations_crd.yaml
+export GIT_PATH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://raw.githubusercontent.com/open-cluster-management-io/governance-policy-propagator/v0.9.0/deploy&#34;</span>
+kubectl apply -f <span style="color:#e6db74">${</span>GIT_PATH<span style="color:#e6db74">}</span>/crds/policy.open-cluster-management.io_policies.yaml
+kubectl apply -f <span style="color:#e6db74">${</span>GIT_PATH<span style="color:#e6db74">}</span>/crds/policy.open-cluster-management.io_placementbindings.yaml
+kubectl apply -f <span style="color:#e6db74">${</span>GIT_PATH<span style="color:#e6db74">}</span>/crds/policy.open-cluster-management.io_policyautomations.yaml
+kubectl apply -f <span style="color:#e6db74">${</span>GIT_PATH<span style="color:#e6db74">}</span>/crds/policy.open-cluster-management.io_policysets.yaml
 
 <span style="color:#75715e"># Deploy the policy-propagator</span>
 kubectl apply -f <span style="color:#e6db74">${</span>GIT_PATH<span style="color:#e6db74">}</span>/operator.yaml -n <span style="color:#e6db74">${</span>HUB_NAMESPACE<span style="color:#e6db74">}</span>
-</code></pre></div><ul>
-<li>See more about the policy propagator:
-<ul>
-<li><a href="https://github.com/open-cluster-management-io/governance-policy-propagator">policy-propagator</a></li>
-</ul>
-</li>
-</ul>
-</li>
+</code></pre></div></li>
 <li>
 <p>Ensure the pods are running on the hub with the following command:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell">$ kubectl get pods -n <span style="color:#e6db74">${</span>HUB_NAMESPACE<span style="color:#e6db74">}</span>
-NAME                                           READY   STATUS    RESTARTS   AGE
-governance-policy-propagator-8c77f7f5f-kthvh   1/1     Running   <span style="color:#ae81ff">0</span>          94s
+NAME                                                       READY   STATUS    RESTARTS   AGE
+governance-policy-propagator-8c77f7f5f-kthvh               1/1     Running   <span style="color:#ae81ff">0</span>          94s
+</code></pre></div><ul>
+<li>See more about the governance-policy-framework components:
+<ul>
+<li><a href="https://github.com/open-cluster-management-io/governance-policy-propagator">policy-propagator</a></li>
+<li><a href="https://github.com/open-cluster-management-io/governance-policy-addon-controller">policy-addon-controller</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="deploy-the-synchronization-components-to-the-managed-clusters">Deploy the synchronization components to the managed cluster(s)</h2>
+<h3 id="deploy-via-clusteradm-cli">Deploy via Clusteradm CLI</h3>
+<ol>
+<li>
+<p>To deploy the synchronization components to a self-managed hub cluster:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell">clusteradm addon enable --names governance-policy-framework --clusters &lt;managed_hub_cluster_name&gt; --annotate addon.open-cluster-management.io/on-multicluster-hub<span style="color:#f92672">=</span>true --context <span style="color:#e6db74">${</span>CTX_HUB_CLUSTER<span style="color:#e6db74">}</span>
+</code></pre></div><p>To deploy the synchronization components to a managed cluster:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell">clusteradm addon enable --names governance-policy-framework --clusters &lt;cluster_name&gt; --context <span style="color:#e6db74">${</span>CTX_HUB_CLUSTER<span style="color:#e6db74">}</span>
 </code></pre></div></li>
+<li>
+<p>Verify that the
+<a href="https://github.com/open-cluster-management-io/governance-policy-framework-addon">governance-policy-framework-addon controller</a>
+pod is running on the managed cluster with the following command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell">$ kubectl get pods -n open-cluster-management-agent-addon
+NAME                                                     READY   STATUS    RESTARTS   AGE
+governance-policy-framework-addon-57579b7c-652zj         1/1     Running   <span style="color:#ae81ff">0</span>          87s
+</code></pre></div><p><strong>NOTE</strong>: If you are using clusteradm v0.3.x or older, the pod will be called <code>governance-policy-framework</code> and
+have a container per synchronization component (2 on a self-managed Hub, or 3 on a managed cluster).</p>
+</li>
+</ol>
+<h3 id="deploy-from-source">Deploy from source</h3>
+<ol>
 <li>
 <p>Export the hub cluster <code>kubeconfig</code> with the following command:</p>
 <p>For <code>kind</code> cluster:</p>
@@ -305,11 +438,18 @@ governance-policy-propagator-8c77f7f5f-kthvh   1/1     Running   <span style="co
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell">kubectl config view --context<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>CTX_HUB_CLUSTER<span style="color:#e6db74">}</span> --minify --flatten &gt; <span style="color:#e6db74">${</span>HUB_KUBECONFIG<span style="color:#e6db74">}</span>
 </code></pre></div></li>
 <li>
-<p>Deploy the policy synchronization components to the managed cluster. Run the following commands:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell"><span style="color:#75715e"># Configure kubectl to point to the managed cluster</span>
+<p>Deploy the
+<a href="https://github.com/open-cluster-management-io/governance-policy-framework-addon">policy synchronization component</a>
+to each managed cluster. Run the following commands:</p>
+<p><strong>NOTE</strong>: The <code>--disable-spec-sync</code> flag should be set to <code>true</code> in the <code>governance-policy-framework-addon</code> container
+arguments when deploying the synchronization component to a hub that is managing itself.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell"><span style="color:#75715e"># Set whether or not this is being deployed on the Hub</span>
+export DEPLOY_ON_HUB<span style="color:#f92672">=</span>false
+
+<span style="color:#75715e"># Configure kubectl to point to the managed cluster</span>
 kubectl config use-context <span style="color:#e6db74">${</span>CTX_MANAGED_CLUSTER<span style="color:#e6db74">}</span>
 
-<span style="color:#75715e"># Create the namespace</span>
+<span style="color:#75715e"># Create the namespace for the synchronization components</span>
 export MANAGED_NAMESPACE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;open-cluster-management-agent-addon&#34;</span>
 kubectl create ns <span style="color:#e6db74">${</span>MANAGED_NAMESPACE<span style="color:#e6db74">}</span>
 
@@ -318,39 +458,23 @@ kubectl -n <span style="color:#e6db74">${</span>MANAGED_NAMESPACE<span style="co
 
 <span style="color:#75715e"># Apply the policy CRD</span>
 export GIT_PATH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;https://raw.githubusercontent.com/open-cluster-management-io&#34;</span>
-kubectl apply -f <span style="color:#e6db74">${</span>GIT_PATH<span style="color:#e6db74">}</span>/governance-policy-propagator/main/deploy/crds/policy.open-cluster-management.io_policies_crd.yaml
+kubectl apply -f <span style="color:#e6db74">${</span>GIT_PATH<span style="color:#e6db74">}</span>/governance-policy-propagator/v0.9.0/deploy/crds/policy.open-cluster-management.io_policies.yaml
 
-<span style="color:#75715e"># Deploy the spec synchronization component</span>
-export COMPONENT<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;governance-policy-spec-sync&#34;</span>
-kubectl apply -f <span style="color:#e6db74">${</span>GIT_PATH<span style="color:#e6db74">}</span>/<span style="color:#e6db74">${</span>COMPONENT<span style="color:#e6db74">}</span>/main/deploy/operator.yaml -n <span style="color:#e6db74">${</span>MANAGED_NAMESPACE<span style="color:#e6db74">}</span>
-kubectl set env deployment/<span style="color:#e6db74">${</span>COMPONENT<span style="color:#e6db74">}</span> -n <span style="color:#e6db74">${</span>MANAGED_NAMESPACE<span style="color:#e6db74">}</span> --containers<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>COMPONENT<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> WATCH_NAMESPACE<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>MANAGED_CLUSTER_NAME<span style="color:#e6db74">}</span>
+<span style="color:#75715e"># Set the managed cluster name and create the namespace</span>
+export MANAGED_CLUSTER_NAME<span style="color:#f92672">=</span>&lt;your managed cluster name&gt;  <span style="color:#75715e"># export MANAGED_CLUSTER_NAME=cluster1</span>
+kubectl create ns <span style="color:#e6db74">${</span>MANAGED_CLUSTER_NAME<span style="color:#e6db74">}</span>
 
-<span style="color:#75715e"># Deploy the status synchronization component</span>
-export COMPONENT<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;governance-policy-status-sync&#34;</span>
-kubectl apply -f <span style="color:#e6db74">${</span>GIT_PATH<span style="color:#e6db74">}</span>/<span style="color:#e6db74">${</span>COMPONENT<span style="color:#e6db74">}</span>/main/deploy/operator.yaml -n <span style="color:#e6db74">${</span>MANAGED_NAMESPACE<span style="color:#e6db74">}</span>
-kubectl set env deployment/<span style="color:#e6db74">${</span>COMPONENT<span style="color:#e6db74">}</span> -n <span style="color:#e6db74">${</span>MANAGED_NAMESPACE<span style="color:#e6db74">}</span> --containers<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>COMPONENT<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> WATCH_NAMESPACE<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>MANAGED_CLUSTER_NAME<span style="color:#e6db74">}</span>
-
-<span style="color:#75715e"># Deploy the template synchronization component</span>
-export COMPONENT<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;governance-policy-template-sync&#34;</span>
-kubectl apply -f <span style="color:#e6db74">${</span>GIT_PATH<span style="color:#e6db74">}</span>/<span style="color:#e6db74">${</span>COMPONENT<span style="color:#e6db74">}</span>/main/deploy/operator.yaml -n <span style="color:#e6db74">${</span>MANAGED_NAMESPACE<span style="color:#e6db74">}</span>
-kubectl set env deployment/<span style="color:#e6db74">${</span>COMPONENT<span style="color:#e6db74">}</span> -n <span style="color:#e6db74">${</span>MANAGED_NAMESPACE<span style="color:#e6db74">}</span> --containers<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>COMPONENT<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> WATCH_NAMESPACE<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>MANAGED_CLUSTER_NAME<span style="color:#e6db74">}</span>
-</code></pre></div><ul>
-<li>See more about the synchronization components:
-<ul>
-<li><a href="https://github.com/open-cluster-management-io/governance-policy-spec-sync">policy-spec-sync</a></li>
-<li><a href="https://github.com/open-cluster-management-io/governance-policy-status-sync">policy-status-sync</a></li>
-<li><a href="https://github.com/open-cluster-management-io/governance-policy-template-sync">policy-template-sync</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<span style="color:#75715e"># Deploy the synchronization component</span>
+export COMPONENT<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;governance-policy-framework-addon&#34;</span>
+kubectl apply -f <span style="color:#e6db74">${</span>GIT_PATH<span style="color:#e6db74">}</span>/<span style="color:#e6db74">${</span>COMPONENT<span style="color:#e6db74">}</span>/v0.9.0/deploy/operator.yaml -n <span style="color:#e6db74">${</span>MANAGED_NAMESPACE<span style="color:#e6db74">}</span>
+kubectl patch deployment governance-policy-framework-addon -n <span style="color:#e6db74">${</span>MANAGED_NAMESPACE<span style="color:#e6db74">}</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>  -p <span style="color:#e6db74">&#34;{\&#34;spec\&#34;:{\&#34;template\&#34;:{\&#34;spec\&#34;:{\&#34;containers\&#34;:[{\&#34;name\&#34;:\&#34;governance-policy-framework-addon\&#34;,\&#34;args\&#34;:[\&#34;--hub-cluster-configfile=/var/run/klusterlet/kubeconfig\&#34;, \&#34;--cluster-namespace=</span><span style="color:#e6db74">${</span>MANAGED_CLUSTER_NAME<span style="color:#e6db74">}</span><span style="color:#e6db74">\&#34;, \&#34;--enable-lease=true\&#34;, \&#34;--log-level=2\&#34;, \&#34;--disable-spec-sync=</span><span style="color:#e6db74">${</span>DEPLOY_ON_HUB<span style="color:#e6db74">}</span><span style="color:#e6db74">\&#34;]}]}}}}&#34;</span>
+</code></pre></div></li>
 <li>
 <p>Verify that the pods are running on the managed cluster with the following command:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell">$ kubectl get pods -n open-cluster-management-agent-addon
-NAME                                               READY   STATUS    RESTARTS   AGE
-governance-policy-spec-sync-6474b6d898-tmkw6       1/1     Running   <span style="color:#ae81ff">0</span>          2m14s
-governance-policy-status-sync-84cbb795df-pgbgt     1/1     Running   <span style="color:#ae81ff">0</span>          2m14s
-governance-policy-template-sync-759b9b556f-mx46t   1/1     Running   <span style="color:#ae81ff">0</span>          2m14s
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Shell" data-lang="Shell">$ kubectl get pods -n <span style="color:#e6db74">${</span>MANAGED_NAMESPACE<span style="color:#e6db74">}</span>
+NAME                                                READY   STATUS    RESTARTS   AGE
+governance-policy-framework-addon-6474b6d898-tmkw6  1/1     Running   <span style="color:#ae81ff">0</span>          2m14s
 </code></pre></div></li>
 </ol>
 <h2 id="what-is-next">What is next</h2>
